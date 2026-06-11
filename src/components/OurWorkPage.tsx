@@ -80,14 +80,16 @@ export default function OurWorkPage() {
               key={tile.image}
               onClick={() => setLightbox(index)}
               className={`group relative overflow-hidden bg-brand-dark text-left cursor-pointer ${
-                tile.video ? "col-span-2" : "aspect-square"
+                tile.video ? "col-span-2 aspect-[2/1] md:aspect-auto" : "aspect-square"
               }`}
             >
               <img
                 src={tile.image}
                 alt={tile.caption}
                 loading="lazy"
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                className={`object-cover transition-all duration-700 group-hover:scale-110 ${
+                  tile.video ? "absolute inset-0 w-full h-full" : "w-full h-full"
+                }`}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="pointer-events-none absolute inset-3 border border-white/40 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500" />

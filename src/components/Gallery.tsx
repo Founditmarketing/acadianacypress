@@ -22,8 +22,6 @@ const galleryItems: GalleryEntry[] = [
   { category: "Interiors", image: "/acadaiana-ourwork2.jpeg", caption: "Sunroom with reclaimed hardwood floors" },
   { category: "Interiors", image: "/acadaiana-ourwork3.jpeg", caption: "Rustic kitchen, walls & flooring" },
   { category: "Interiors", image: "/acadaiana-ourwork4.jpeg", caption: "Cabin bedroom suite" },
-  { category: "Interiors", image: "/acadaiana-ourwork5.jpeg", caption: "Lodge great room" },
-  { category: "Furniture", image: "/acadaiana-ourwork6.jpg", caption: "Live-edge cypress table & benches" },
 ];
 
 const filters = ["All", "Interiors", "Exteriors", "Furniture"];
@@ -101,14 +99,16 @@ export default function Gallery() {
               transition={{ duration: 0.35 }}
               onClick={() => setLightbox(index)}
               className={`group relative overflow-hidden bg-brand-dark text-left cursor-pointer ${
-                item.video ? "col-span-2" : "aspect-square"
+                item.video ? "col-span-2 aspect-[2/1] lg:aspect-auto" : "aspect-square"
               }`}
             >
               <img
                 src={item.image}
                 alt={item.caption}
                 loading="lazy"
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                className={`object-cover transition-all duration-700 group-hover:scale-110 ${
+                  item.video ? "absolute inset-0 w-full h-full" : "w-full h-full"
+                }`}
               />
 
               {/* Hover overlay */}

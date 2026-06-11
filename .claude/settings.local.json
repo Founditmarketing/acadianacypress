@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof -nP -iTCP:3000 -sTCP:LISTEN)",
+      "Bash(lsof -nP -iTCP -sTCP:LISTEN)",
+      "Bash(ps -p 95624,95696,52309,91625 -o pid,lstart,command)",
+      "Bash(kill 52309 91625 95624 95696)",
+      "Bash(echo \"port 3000 status: $?\")",
+      "Bash(npm install *)"
+    ]
+  }
+}

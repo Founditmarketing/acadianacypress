@@ -36,12 +36,21 @@ const slides = [
 
 export default function Hero({ revealed = true }: { revealed?: boolean }) {
   const [active, setActive] = useState(0);
+  // The outgoing slide keeps its zoom animation while it fades, otherwise its
+  // transform snaps back to scale(1) mid-crossfade and the image jumps.
+  const [previous, setPrevious] = useState<number | null>(null);
+
+  const goTo = (index: number) => {
+    if (index === active) return;
+    setPrevious(active);
+    setActive(index);
+  };
 
   // Auto-advance; restarting the timeout whenever `active` changes also
   // resets the timer after a manual selection.
   useEffect(() => {
     const timer = setTimeout(
-      () => setActive((i) => (i + 1) % slides.length),
+      () => goTo((active + 1) % slides.length),
       SLIDE_DURATION
     );
     return () => clearTimeout(timer);
@@ -56,9 +65,9 @@ export default function Hero({ revealed = true }: { revealed?: boolean }) {
             key={slide.image}
             src={slide.image}
             alt={slide.alt}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              i === active ? "opacity-80 hero-zoom" : "opacity-0"
-            }`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out ${
+              i === active ? "opacity-80" : "opacity-0"
+            } ${i === active || i === previous ? "hero-zoom" : ""}`}
           />
         ))}
         {/* Subtle gradient overlay to ensure text readability */}
@@ -79,7 +88,7 @@ export default function Hero({ revealed = true }: { revealed?: boolean }) {
             {slides.map((slide, i) => (
               <div key={slide.label}>
                 <button
-                  onClick={() => setActive(i)}
+                  onClick={() => goTo(i)}
                   className={`block text-left uppercase tracking-tight leading-tight transition-colors duration-300 cursor-pointer ${
                     i === active
                       ? "text-white"
@@ -113,7 +122,7 @@ export default function Hero({ revealed = true }: { revealed?: boolean }) {
             {slides.map((slide, i) => (
               <button
                 key={slide.label}
-                onClick={() => setActive(i)}
+                onClick={() => goTo(i)}
                 aria-label={`Show ${slide.label}`}
                 className="relative h-[3px] w-14 md:w-24 bg-white/25 overflow-hidden cursor-pointer"
               >

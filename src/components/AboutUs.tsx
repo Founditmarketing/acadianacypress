@@ -35,7 +35,7 @@ export default function AboutUs() {
         </h2>
         <div className="w-10 h-[2px] bg-brand-accent mb-8 md:mb-10" />
         <p className="text-brand-dark/80 text-xl md:text-2xl lg:text-3xl font-light leading-relaxed tracking-tight max-w-4xl">
-          We are located in South Louisiana in Moreauville & Grand Coteau, where we carefully mill the one-of-a-kind cypress wood that grows in the swamps of Louisiana and ship it to you anywhere in the United States. Customers are more than welcome to come see what we're all about by visiting our mill yard during business hours.
+          We are located in South Louisiana in Moreauville & Grand Coteau, where we carefully mill the one-of-a-kind cypress wood that grows in South Louisiana and ship it to you anywhere in the United States. Customers are more than welcome to come see what we're all about by visiting our mill yard during business hours.
         </p>
       </div>
     </section>

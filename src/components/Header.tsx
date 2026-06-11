@@ -569,30 +569,14 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                   Request Quote
                 </a>
                 <div className="space-y-2 text-sm text-white/70 font-light">
-                  {LOCATIONS.map((location) => (
-                    <a
-                      key={location.key}
-                      href={`tel:${location.phoneTel}`}
-                      className="flex items-center space-x-3 hover:text-brand-accent transition-colors"
-                    >
-                      <Phone className="w-4 h-4 text-brand-accent" />
-                      <span>
-                        {location.phoneDisplay} ({location.phoneContact},{" "}
-                        {location.label})
-                      </span>
-                    </a>
-                  ))}
                   <a
-                    href={`mailto:${EMAIL}`}
+                    href="#locations"
+                    onClick={() => setMenuOpen(false)}
                     className="flex items-center space-x-3 hover:text-brand-accent transition-colors"
                   >
-                    <Mail className="w-4 h-4 text-brand-accent" />
-                    <span>{EMAIL}</span>
-                  </a>
-                  <p className="flex items-center space-x-3">
                     <MapPin className="w-4 h-4 text-brand-accent" />
                     <span>Moreauville &amp; Grand Coteau, LA</span>
-                  </p>
+                  </a>
                   <a
                     href={FACEBOOK_URL}
                     target="_blank"

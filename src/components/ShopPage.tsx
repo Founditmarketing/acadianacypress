@@ -11,8 +11,14 @@ interface ShopPageProps {
   category?: string;
 }
 
+// Only categories that actually contain products, with live counts,
+// so the filters always match the catalog exactly.
+const countFor = (cat: string) =>
+  products.filter((p) => (p.categories as string[]).includes(cat)).length;
+const filterCategories = PRODUCT_CATEGORIES.filter((c) => countFor(c) > 0);
+
 export default function ShopPage({ category }: ShopPageProps) {
-  const activeCategory = PRODUCT_CATEGORIES.find(
+  const activeCategory = filterCategories.find(
     (c) => categorySlug(c) === category
   );
   const visible = activeCategory
@@ -31,22 +37,30 @@ export default function ShopPage({ category }: ShopPageProps) {
         shipping.
       </p>
 
-      {/* Category filters */}
-      <div className="flex space-x-8 mb-14 overflow-x-auto no-scrollbar border-b border-gray-200 pb-4">
-        {["All", ...PRODUCT_CATEGORIES].map((cat) => {
+      {/* Category filters — wrapping chips, no horizontal scroll needed */}
+      <div className="flex flex-wrap gap-2.5 mb-14">
+        {["All", ...filterCategories].map((cat) => {
           const isActive =
             cat === "All" ? !activeCategory : cat === activeCategory;
+          const count = cat === "All" ? products.length : countFor(cat);
           return (
             <a
               key={cat}
               href={cat === "All" ? "#products" : `#products/${categorySlug(cat)}`}
-              className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-brand-accent ${
+              className={`inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium transition-colors ${
                 isActive
-                  ? "text-brand-dark border-b-2 border-brand-accent pb-4 -mb-[18px]"
-                  : "text-brand-dark/50"
+                  ? "bg-brand-dark border-brand-dark text-white"
+                  : "border-brand-dark/20 text-brand-dark/70 hover:border-brand-accent hover:text-brand-accent"
               }`}
             >
-              {cat}
+              <span>{cat}</span>
+              <span
+                className={`text-[11px] ${
+                  isActive ? "text-brand-accent" : "text-brand-dark/40"
+                }`}
+              >
+                {count}
+              </span>
             </a>
           );
         })}
@@ -63,7 +77,7 @@ export default function ShopPage({ category }: ShopPageProps) {
             transition={{ duration: 0.4, delay: Math.min(i * 0.05, 0.4) }}
             className="group block bg-white"
           >
-            <div className="aspect-[4/5] overflow-hidden bg-brand-dark relative">
+            <div className="aspect-[4/3] sm:aspect-[4/5] overflow-hidden bg-brand-dark relative">
               <img
                 src={product.images[0]}
                 alt={product.name}

@@ -15,7 +15,7 @@ export const searchIndex: SearchItem[] = [
     href: "#why-cypress",
     type: "Page",
     keywords:
-      "history quality louisiana state tree bald cypress durability heart grain swamp",
+      "history quality louisiana state tree bald cypress durability heart grain",
   },
   {
     title: "Contact Us",

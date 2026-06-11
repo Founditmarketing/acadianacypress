@@ -79,8 +79,8 @@ export default function OurWorkPage() {
             <button
               key={tile.image}
               onClick={() => setLightbox(index)}
-              className={`group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer ${
-                tile.video ? "col-span-2 row-span-2" : ""
+              className={`group relative overflow-hidden bg-brand-dark text-left cursor-pointer ${
+                tile.video ? "col-span-2" : "aspect-square"
               }`}
             >
               <img

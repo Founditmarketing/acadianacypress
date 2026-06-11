@@ -100,8 +100,8 @@ export default function Gallery() {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.35 }}
               onClick={() => setLightbox(index)}
-              className={`group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer ${
-                item.video ? "col-span-2 row-span-2" : ""
+              className={`group relative overflow-hidden bg-brand-dark text-left cursor-pointer ${
+                item.video ? "col-span-2" : "aspect-square"
               }`}
             >
               <img

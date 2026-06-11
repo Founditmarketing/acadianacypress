@@ -57,12 +57,12 @@ export default function Hero({ revealed = true }: { revealed?: boolean }) {
             src={slide.image}
             alt={slide.alt}
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              i === active ? "opacity-80" : "opacity-0"
+              i === active ? "opacity-80 hero-zoom" : "opacity-0"
             }`}
           />
         ))}
         {/* Subtle gradient overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/25" />
       </div>
 
       {/* Content */}
@@ -83,7 +83,7 @@ export default function Hero({ revealed = true }: { revealed?: boolean }) {
                   className={`block text-left uppercase tracking-tight leading-tight transition-colors duration-300 cursor-pointer ${
                     i === active
                       ? "text-white"
-                      : "text-white/40 hover:text-white/75"
+                      : "text-white/50 hover:text-white/80"
                   }`}
                 >
                   {slide.label}

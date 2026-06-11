@@ -97,31 +97,31 @@ export default function Services() {
               <a
                 key={card.title}
                 href={card.href}
-                className="group relative flex-none w-[85vw] sm:w-[400px] md:w-[440px] lg:w-[480px] h-[600px] overflow-hidden snap-center bg-brand-dark"
+                className="group relative flex-none w-[72vw] sm:w-[380px] md:w-[440px] lg:w-[480px] h-[430px] md:h-[600px] overflow-hidden snap-center bg-brand-dark"
               >
                 {/* Image */}
                 <img
                   src={card.image}
                   alt={card.title}
                   loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
+                  className="absolute inset-0 w-full h-full object-cover opacity-100 md:opacity-90 transition-all duration-700 md:group-hover:scale-110 md:group-hover:opacity-100"
                 />
 
                 {/* Overlay gradient, deepens on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30 opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30 opacity-100 md:opacity-90 md:group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Inset line frame, draws in on hover */}
-                <div className="pointer-events-none absolute inset-4 border border-white/0 scale-[0.97] group-hover:border-white/40 group-hover:scale-100 transition-all duration-500" />
+                <div className="pointer-events-none absolute inset-3 md:inset-4 border border-white/40 scale-100 md:border-white/0 md:scale-[0.97] md:group-hover:border-white/40 md:group-hover:scale-100 transition-all duration-500" />
 
                 {/* Index */}
-                <span className="absolute top-8 right-8 text-white/60 text-sm font-light tracking-[0.3em] transition-colors duration-500 group-hover:text-brand-accent">
+                <span className="absolute top-7 right-7 md:top-8 md:right-8 text-brand-accent md:text-white/60 text-sm font-light tracking-[0.3em] transition-colors duration-500 md:group-hover:text-brand-accent">
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
                 {/* Content */}
-                <div className="absolute inset-x-8 bottom-8">
-                  <div className="h-[2px] w-10 bg-brand-accent mb-5 transition-all duration-500 group-hover:w-24" />
-                  <h3 className="title-serif text-white text-2xl md:text-3xl leading-snug">
+                <div className="absolute inset-x-7 bottom-7 md:inset-x-8 md:bottom-8">
+                  <div className="h-[2px] w-24 md:w-10 bg-brand-accent mb-4 md:mb-5 transition-all duration-500 md:group-hover:w-24" />
+                  <h3 className="title-serif text-white text-xl md:text-3xl leading-snug">
                     {card.title}
                   </h3>
                   <p className="text-white/70 text-sm font-light mt-2">
@@ -129,7 +129,7 @@ export default function Services() {
                   </p>
 
                   {/* Reveal row */}
-                  <div className="flex items-center justify-between max-h-0 opacity-0 overflow-hidden transition-all duration-500 group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-6">
+                  <div className="flex items-center justify-between max-h-14 opacity-100 mt-5 md:max-h-0 md:opacity-0 md:mt-0 overflow-hidden transition-all duration-500 md:group-hover:max-h-14 md:group-hover:opacity-100 md:group-hover:mt-6">
                     <span className="text-white/80 text-xs uppercase tracking-[0.2em]">
                       {count} {count === 1 ? "Product" : "Products"}
                     </span>

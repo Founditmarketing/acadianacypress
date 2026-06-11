@@ -29,6 +29,15 @@ body {
   scrollbar-width: none;
 }
 
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.hero-zoom {
+  animation: hero-zoom 7.5s ease-out forwards;
+}
+
 @keyframes loadscreen-fade {
   from { opacity: 0; }
   to { opacity: 1; }

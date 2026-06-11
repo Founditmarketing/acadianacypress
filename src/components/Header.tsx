@@ -26,6 +26,7 @@ import {
 import { searchSite } from "../data/searchIndex";
 
 const tagline_phrases = [
+  "Moreauville & Grand Coteau, Louisiana",
   "Quality you can see. Craftsmanship you can trust.",
   "Family-owned & operated in the heart of Acadiana.",
   "Custom milling, flooring, mantels & more.",
@@ -123,13 +124,21 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
     route === "#contact-us";
   const solid = scrolled || onSubPage;
 
-  // Rotate the top-bar tagline
+  // Rotate the top-bar tagline. The first phrase (our locations) holds for
+  // 7s so it's still showing when the load screen reveals the site.
   useEffect(() => {
-    const timer = setInterval(
-      () => setPhrase((p) => (p + 1) % tagline_phrases.length),
-      5000
-    );
-    return () => clearInterval(timer);
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const start = setTimeout(() => {
+      setPhrase(1);
+      interval = setInterval(
+        () => setPhrase((p) => (p + 1) % tagline_phrases.length),
+        5000
+      );
+    }, 7000);
+    return () => {
+      clearTimeout(start);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {

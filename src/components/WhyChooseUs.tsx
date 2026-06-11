@@ -1,7 +1,17 @@
+import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import { motion, useScroll, useTransform } from "motion/react";
 import SectionLabel from "./SectionLabel";
 
 export default function WhyChooseUs() {
+  const imageRef = useRef<HTMLDivElement | null>(null);
+  // Gentle parallax: the photo drifts as the section scrolls through view
+  const { scrollYProgress } = useScroll({
+    target: imageRef,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-7%", "7%"]);
+
   return (
     <section className="flex flex-col lg:flex-row min-h-[700px] bg-white">
       {/* Left Column: Text */}
@@ -9,8 +19,7 @@ export default function WhyChooseUs() {
         <div className="max-w-2xl">
           <SectionLabel>Why Choose Us</SectionLabel>
           <h2 className="title-serif text-brand-dark text-3xl md:text-4xl xl:text-5xl tracking-tight mb-12 leading-tight">
-            DIRECT FROM THE MILL.<br />
-            AUTHENTIC LOUISIANA CYPRESS.
+            DIRECT FROM THE MILL. AUTHENTIC LOUISIANA CYPRESS.
           </h2>
           <ul className="space-y-6 mb-16 text-lg text-brand-dark/80 font-light">
             <li className="flex items-start">
@@ -33,11 +42,12 @@ export default function WhyChooseUs() {
         </div>
       </div>
 
-      {/* Right Column: Image */}
-      <div className="w-full lg:w-1/2 h-[50vh] lg:h-auto">
-        <img 
+      {/* Right Column: Image with scroll parallax (oversized so the drift never shows edges) */}
+      <div ref={imageRef} className="w-full lg:w-1/2 h-[50vh] lg:h-auto overflow-hidden relative">
+        <motion.img
           src="/acadiana-location2.jpg"
           alt="Acadiana Cypress mill direct showroom"
+          style={{ y, scale: 1.16 }}
           className="w-full h-full object-cover"
         />
       </div>

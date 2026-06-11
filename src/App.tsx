@@ -20,6 +20,7 @@ import WhyCypressPage from './components/WhyCypressPage';
 import OurWorkPage from './components/OurWorkPage';
 import ContactPage from './components/ContactPage';
 import LocationsPage from './components/LocationsPage';
+import LegalPage from './components/LegalPage';
 import ContactDock from './components/ContactDock';
 import LoadScreen from './components/LoadScreen';
 
@@ -59,6 +60,10 @@ export default function App() {
     page = <ContactPage />;
   } else if (hash === '#locations') {
     page = <LocationsPage />;
+  } else if (hash === '#privacy-policy') {
+    page = <LegalPage page="privacy" />;
+  } else if (hash === '#terms-conditions') {
+    page = <LegalPage page="terms" />;
   }
 
   // Start each shop/product view from the top (in-page #anchors keep native behavior)

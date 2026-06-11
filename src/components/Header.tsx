@@ -121,7 +121,9 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
     route === "#products" ||
     route.startsWith("#products/") ||
     route.startsWith("#product/") ||
-    route === "#contact-us";
+    route === "#contact-us" ||
+    route === "#privacy-policy" ||
+    route === "#terms-conditions";
   const solid = scrolled || onSubPage;
 
   // Rotate the top-bar tagline. The first phrase (our locations) holds for

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand, Play, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import SectionLabel from "./SectionLabel";
 
@@ -7,9 +7,17 @@ interface GalleryEntry {
   category: string;
   image: string;
   caption: string;
+  /** When set, the tile is a video spotlight and the lightbox plays it. */
+  video?: string;
 }
 
 const galleryItems: GalleryEntry[] = [
+  {
+    category: "Furniture",
+    image: "/acadiana-video-thumb.jpg",
+    caption: "Live-edge sinker cypress table — watch the showcase",
+    video: "/acadiana-video.mp4",
+  },
   { category: "Exteriors", image: "/acadaiana-ourwork1.jpg", caption: "Cypress beam front porch" },
   { category: "Interiors", image: "/acadaiana-ourwork2.jpeg", caption: "Sunroom with reclaimed hardwood floors" },
   { category: "Interiors", image: "/acadaiana-ourwork3.jpeg", caption: "Rustic kitchen, walls & flooring" },
@@ -92,7 +100,9 @@ export default function Gallery() {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.35 }}
               onClick={() => setLightbox(index)}
-              className="group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer"
+              className={`group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer ${
+                item.video ? "col-span-2 row-span-2" : ""
+              }`}
             >
               <img
                 src={item.image}
@@ -107,10 +117,22 @@ export default function Gallery() {
               {/* Inset line frame */}
               <div className="pointer-events-none absolute inset-3 border border-white/40 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500" />
 
-              {/* Expand icon */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full border border-white/70 flex items-center justify-center text-white opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
-                <Expand className="w-5 h-5" />
-              </div>
+              {/* Play badge (videos) / expand icon (photos) */}
+              {item.video ? (
+                <>
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors duration-500" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-accent text-white flex items-center justify-center shadow-2xl shadow-black/40 transition-transform duration-300 group-hover:scale-110">
+                    <Play className="w-7 h-7 md:w-8 md:h-8 ml-1" fill="currentColor" />
+                  </div>
+                  <span className="absolute top-5 left-5 border border-white/40 bg-black/40 backdrop-blur-sm text-white text-[10px] uppercase tracking-[0.3em] px-3 py-1.5">
+                    Watch
+                  </span>
+                </>
+              ) : (
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full border border-white/70 flex items-center justify-center text-white opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+                  <Expand className="w-5 h-5" />
+                </div>
+              )}
 
               {/* Caption */}
               <div className="absolute inset-x-6 bottom-5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
@@ -185,11 +207,21 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
               className="max-w-[90vw] max-h-[85vh] flex flex-col items-center"
             >
-              <img
-                src={visible[lightbox].image}
-                alt={visible[lightbox].caption}
-                className="max-w-full max-h-[75vh] object-contain"
-              />
+              {visible[lightbox].video ? (
+                <video
+                  src={visible[lightbox].video}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-w-full max-h-[75vh] bg-black"
+                />
+              ) : (
+                <img
+                  src={visible[lightbox].image}
+                  alt={visible[lightbox].caption}
+                  className="max-w-full max-h-[75vh] object-contain"
+                />
+              )}
               <div className="text-center mt-5">
                 <p className="text-brand-accent text-xs uppercase tracking-[0.25em] mb-1">
                   {visible[lightbox].category}

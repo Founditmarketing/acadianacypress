@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Expand, Play, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { products } from "../data/products";
 import DedicatedCTA from "./DedicatedCTA";
@@ -11,6 +11,8 @@ interface WorkTile {
   category: string;
   /** Product pages get a link from the lightbox. */
   href?: string;
+  /** When set, the tile is a video spotlight and the lightbox plays it. */
+  video?: string;
 }
 
 const galleryTiles: WorkTile[] = [
@@ -23,6 +25,12 @@ const galleryTiles: WorkTile[] = [
 ];
 
 const tiles: WorkTile[] = [
+  {
+    category: "Furniture",
+    image: "/acadiana-video-thumb.jpg",
+    caption: "Live-edge sinker cypress table — watch the showcase",
+    video: "/acadiana-video.mp4",
+  },
   ...galleryTiles,
   ...products.map((product) => ({
     image: product.images[0],
@@ -71,7 +79,9 @@ export default function OurWorkPage() {
             <button
               key={tile.image}
               onClick={() => setLightbox(index)}
-              className="group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer"
+              className={`group relative aspect-square overflow-hidden bg-brand-dark text-left cursor-pointer ${
+                tile.video ? "col-span-2 row-span-2" : ""
+              }`}
             >
               <img
                 src={tile.image}
@@ -81,9 +91,21 @@ export default function OurWorkPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="pointer-events-none absolute inset-3 border border-white/40 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/70 flex items-center justify-center text-white opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
-                <Expand className="w-4 h-4" />
-              </div>
+              {tile.video ? (
+                <>
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors duration-500" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-accent text-white flex items-center justify-center shadow-2xl shadow-black/40 transition-transform duration-300 group-hover:scale-110">
+                    <Play className="w-7 h-7 md:w-8 md:h-8 ml-1" fill="currentColor" />
+                  </div>
+                  <span className="absolute top-5 left-5 border border-white/40 bg-black/40 backdrop-blur-sm text-white text-[10px] uppercase tracking-[0.3em] px-3 py-1.5">
+                    Watch
+                  </span>
+                </>
+              ) : (
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/70 flex items-center justify-center text-white opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500">
+                  <Expand className="w-4 h-4" />
+                </div>
+              )}
               <div className="absolute inset-x-5 bottom-4 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                 <p className="text-brand-accent text-[10px] uppercase tracking-[0.25em] mb-1">
                   {tile.category}
@@ -144,11 +166,21 @@ export default function OurWorkPage() {
               onClick={(e) => e.stopPropagation()}
               className="max-w-[90vw] max-h-[85vh] flex flex-col items-center"
             >
-              <img
-                src={tiles[lightbox].image}
-                alt={tiles[lightbox].caption}
-                className="max-w-full max-h-[70vh] object-contain"
-              />
+              {tiles[lightbox].video ? (
+                <video
+                  src={tiles[lightbox].video}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-w-full max-h-[70vh] bg-black"
+                />
+              ) : (
+                <img
+                  src={tiles[lightbox].image}
+                  alt={tiles[lightbox].caption}
+                  className="max-w-full max-h-[70vh] object-contain"
+                />
+              )}
               <div className="text-center mt-5">
                 <p className="text-brand-accent text-xs uppercase tracking-[0.25em] mb-1">
                   {tiles[lightbox].category}

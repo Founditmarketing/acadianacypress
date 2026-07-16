@@ -165,13 +165,8 @@ export default function QuoteCalculator() {
 
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
         {/* ── LEFT — editorial pitch ──────────────────────────────────── */}
-        <div className="relative min-w-0 lg:col-span-5 flex flex-col justify-between">
-          {/* Warm amber "ember" glow behind the headline */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-16 -left-10 w-72 h-72 rounded-full bg-brand-accent/15 blur-3xl"
-          />
-          <div className="relative">
+        <div className="min-w-0 lg:col-span-5 flex flex-col justify-between">
+          <div>
             <SectionLabel>Instant Pricing</SectionLabel>
             <h2 className="title-serif text-white text-4xl md:text-5xl leading-[1.05] tracking-tight mb-6">
               LUMBER QUOTE CALCULATOR

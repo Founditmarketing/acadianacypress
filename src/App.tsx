@@ -9,6 +9,7 @@ import Hero from './components/Hero';
 import TrustBanner from './components/TrustBanner';
 import AboutUs from './components/AboutUs';
 import Services from './components/Services';
+import QuoteCalculator from './components/QuoteCalculator';
 import WhyChooseUs from './components/WhyChooseUs';
 import Gallery from './components/Gallery';
 import Locations from './components/Locations';
@@ -82,6 +83,7 @@ export default function App() {
             <TrustBanner />
             <AboutUs />
             <Services />
+            <QuoteCalculator />
             <WhyChooseUs />
             <Gallery />
             <DedicatedCTA />

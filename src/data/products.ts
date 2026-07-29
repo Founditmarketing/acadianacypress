@@ -45,12 +45,12 @@ export const products: Product[] = [
     images: imgs("cypress-post-beams", 7),
   },
   {
-    slug: "cypress-shiplap",
-    name: "Cypress Shiplap",
+    slug: "cypress-tongue-groove",
+    name: "Cypress Tongue & Groove",
     description:
-      "We make Cypress Shiplap rather than pine shiplap. By using cypress you won't ever have to worry about termites eating it as they would pine.",
-    categories: ["Walls & Ceilings"],
-    images: imgs("cypress-shiplap", 2),
+      "Our Cypress Tongue & Groove is precision milled for a tight, seamless fit on ceilings, walls, and porches — with the natural rot and insect resistance pine can't match.",
+    categories: ["Tongue & Groove"],
+    images: imgs("cypress-tongue-groove", 1),
   },
   {
     slug: "cypress-trees",
@@ -74,7 +74,7 @@ export const products: Product[] = [
     description:
       "Our buildings are stocked with some beautiful Cypress, Willow, Cedar, and Reclaimed Hardwoods!",
     categories: ["Flooring", "Walls & Ceilings"],
-    images: imgs("hardwood-varieties", 11),
+    images: imgs("hardwood-varieties", 10),
   },
   {
     slug: "hunting-blinds",

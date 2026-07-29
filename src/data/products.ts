@@ -58,7 +58,7 @@ export const products: Product[] = [
     description:
       "We sell Cypress trees which look amazing in homes, offices, camps, or lodges. Give your space that good 'Louisiana Look.'",
     categories: ["Posts & Beams"],
-    images: imgs("cypress-trees", 3),
+    images: imgs("cypress-trees", 8),
   },
   {
     slug: "fireplace-mantels",

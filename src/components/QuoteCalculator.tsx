@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ClipboardList, Plus, Send, Trash2, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { Check, ChevronDown, ClipboardList, Plus, Send, Trash2, X } from "lucide-react";
 import { EMAIL } from "../data/contact";
 import {
   LUMBER_LINES,
@@ -44,6 +44,9 @@ export default function QuoteCalculator() {
   const [qty, setQty] = useState(1);
   const [items, setItems] = useState<EstimateItem[]>([]);
   const listRef = useRef<HTMLUListElement>(null);
+  const [buyerName, setBuyerName] = useState("");
+  const [buyerContact, setBuyerContact] = useState("");
+  const [estimateSubmitted, setEstimateSubmitted] = useState(false);
 
   // Keep the cross-section / length selections valid when the product line changes.
   const section = line.crossSections[sectionIdx] ?? line.crossSections[0];
@@ -102,13 +105,33 @@ export default function QuoteCalculator() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [items]);
 
-  const emailEstimate = () => {
-    const lines = items.map(
+  const estimateLines = () =>
+    items.map(
       (it) =>
-        `• ${it.qty} × ${it.lineName} ${it.label}  —  ${formatUSD(
+        `${it.qty} x ${it.lineName} ${it.label} @ ${formatUSD(
           it.unitPrice
-        )}/ea  =  ${formatUSD(it.unitPrice * it.qty)}`
+        )}/ea = ${formatUSD(it.unitPrice * it.qty)}`
     );
+
+  const estimateSummary = () =>
+    [
+      ...estimateLines(),
+      `Estimated subtotal: ${formatUSD(estimateTotal)}`,
+      PRICING_IS_PRELIMINARY
+        ? "(Preliminary estimate — not a final quote.)"
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+  const submitEstimate = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setEstimateSubmitted(true);
+    setBuyerName("");
+    setBuyerContact("");
+  };
+
+  const mailtoHref = () => {
     const subject = encodeURIComponent(
       "Lumber quote request (from website calculator)"
     );
@@ -118,23 +141,15 @@ export default function QuoteCalculator() {
         "",
         "I put together the following estimate on your website and would like to confirm pricing and availability:",
         "",
-        ...lines,
-        "",
-        `Estimated subtotal: ${formatUSD(estimateTotal)}`,
-        "",
-        PRICING_IS_PRELIMINARY
-          ? "(I understand these are preliminary estimates, not a final quote.)"
-          : "",
+        estimateSummary(),
         "",
         "Name:",
         "Phone:",
         "Project / delivery location:",
         "Notes:",
-      ]
-        .filter((l) => l !== null)
-        .join("\n")
+      ].join("\n")
     );
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   };
 
   const fieldClasses =
@@ -390,23 +405,60 @@ export default function QuoteCalculator() {
                 </div>
 
                 <div className="px-6 md:px-8 pb-6">
-                  <button
-                    type="button"
-                    onClick={emailEstimate}
-                    className="inline-flex items-center justify-center gap-2.5 w-full bg-brand-accent text-white py-3.5 hover:bg-[#a36814] transition-colors font-medium tracking-widest text-sm uppercase shadow-lg"
-                  >
-                    <Send className="w-4 h-4" />
-                    Email This Estimate
-                  </button>
-                  <p className="text-center text-xs font-light text-brand-dark/45 mt-3">
-                    Opens a pre-filled email to confirm pricing, availability,
-                    and delivery.
-                  </p>
-                  {PRICING_IS_PRELIMINARY && (
-                    <p className="text-center text-[11px] font-light text-brand-dark/40 mt-2">
-                      Preliminary estimate — not a final quote; freight &
-                      finishing not included.
-                    </p>
+                  {estimateSubmitted ? (
+                    <div className="border border-brand-dark/10 p-6 flex flex-col items-center text-center space-y-2">
+                      <Check className="w-6 h-6 text-brand-accent" />
+                      <p className="text-brand-dark text-sm font-medium">
+                        Thanks — we've got your estimate. We'll follow up to
+                        confirm pricing and availability.
+                      </p>
+                    </div>
+                  ) : (
+                    <form onSubmit={submitEstimate} className="space-y-3">
+                      <input type="hidden" name="message" value={estimateSummary()} />
+                      <input
+                        type="text"
+                        name="name"
+                        value={buyerName}
+                        onChange={(e) => setBuyerName(e.target.value)}
+                        placeholder="Name"
+                        required
+                        className={`${fieldClasses} px-3`}
+                      />
+                      <input
+                        type="text"
+                        name="phone_or_email"
+                        value={buyerContact}
+                        onChange={(e) => setBuyerContact(e.target.value)}
+                        placeholder="Phone or email"
+                        required
+                        className={`${fieldClasses} px-3`}
+                      />
+                      <button
+                        type="submit"
+                        className="inline-flex items-center justify-center gap-2.5 w-full bg-brand-accent text-white py-3.5 hover:bg-[#a36814] transition-colors font-medium tracking-widest text-sm uppercase shadow-lg"
+                      >
+                        <Send className="w-4 h-4" />
+                        Send This Estimate
+                      </button>
+                      <p className="text-center text-xs font-light text-brand-dark/45 mt-3">
+                        We'll follow up to confirm pricing, availability, and
+                        delivery. Prefer email?{" "}
+                        <a
+                          href={mailtoHref()}
+                          className="text-brand-accent hover:underline"
+                        >
+                          Send it yourself
+                        </a>
+                        .
+                      </p>
+                      {PRICING_IS_PRELIMINARY && (
+                        <p className="text-center text-[11px] font-light text-brand-dark/40 mt-2">
+                          Preliminary estimate — not a final quote; freight &
+                          finishing not included.
+                        </p>
+                      )}
+                    </form>
                   )}
                 </div>
               </div>

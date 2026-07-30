@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import {
+  Check,
   MapPin,
   MessageSquare,
   Phone,
@@ -8,23 +9,21 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { EMAIL, LOCATIONS, PHONE_DISPLAY, PHONE_TEL } from "../data/contact";
+import { LOCATIONS, PHONE_DISPLAY, PHONE_TEL } from "../data/contact";
 
 /** Shared panel content: Call Now on top, quick contact form below. */
 function ContactPanel({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const submit = (e: FormEvent) => {
+  const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const subject = encodeURIComponent(
-      `Quote request from ${name || "website visitor"}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${name}\nPhone / Email: ${contact}\n\n${message}`
-    );
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    setSubmitted(true);
+    setName("");
+    setContact("");
+    setMessage("");
   };
 
   const inputClasses =
@@ -80,39 +79,51 @@ function ContactPanel({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Quick contact form */}
-        <form onSubmit={submit} className="space-y-3">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
-            required
-            className={inputClasses}
-          />
-          <input
-            type="text"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            placeholder="Phone or email"
-            required
-            className={inputClasses}
-          />
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="What can we help you with?"
-            rows={3}
-            required
-            className={`${inputClasses} resize-none`}
-          />
-          <button
-            type="submit"
-            className="flex items-center justify-center space-x-3 w-full bg-brand-dark text-white py-3.5 hover:bg-brand-accent transition-colors font-medium tracking-widest text-sm uppercase"
-          >
-            <Send className="w-4 h-4" />
-            <span>Send Message</span>
-          </button>
-        </form>
+        {submitted ? (
+          <div className="border border-brand-dark/10 p-6 flex flex-col items-center text-center space-y-2">
+            <Check className="w-6 h-6 text-brand-accent" />
+            <p className="text-brand-dark text-sm font-medium">
+              Thanks — we'll get back to you soon.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={submit} className="space-y-3">
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              required
+              className={inputClasses}
+            />
+            <input
+              type="text"
+              name="phone_or_email"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+              placeholder="Phone or email"
+              required
+              className={inputClasses}
+            />
+            <textarea
+              name="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="What can we help you with?"
+              rows={3}
+              required
+              className={`${inputClasses} resize-none`}
+            />
+            <button
+              type="submit"
+              className="flex items-center justify-center space-x-3 w-full bg-brand-dark text-white py-3.5 hover:bg-brand-accent transition-colors font-medium tracking-widest text-sm uppercase"
+            >
+              <Send className="w-4 h-4" />
+              <span>Send Message</span>
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

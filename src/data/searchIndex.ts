@@ -9,43 +9,43 @@ export interface SearchItem {
 }
 
 export const searchIndex: SearchItem[] = [
-  { title: "Home", href: "#", type: "Page", keywords: "home welcome main" },
+  { title: "Home", href: "/", type: "Page", keywords: "home welcome main" },
   {
     title: "Why Cypress",
-    href: "#why-cypress",
+    href: "/why-cypress",
     type: "Page",
     keywords:
       "history quality louisiana state tree bald cypress durability heart grain",
   },
   {
     title: "Contact Us",
-    href: "#contact-us",
+    href: "/contact-us",
     type: "Page",
     keywords: "phone email message quote form call pricing samples",
   },
   {
     title: "Our Locations",
-    href: "#locations",
+    href: "/locations",
     type: "Page",
     keywords:
       "visit showroom sawmill moreauville grand coteau hours directions address map",
   },
   {
     title: "Browse All Products",
-    href: "#products",
+    href: "/products",
     type: "Page",
     keywords: "shop store catalog browse products",
   },
   {
     title: "Our Work",
-    href: "#our-work",
+    href: "/our-work",
     type: "Page",
     keywords: "gallery projects portfolio showcase photos work examples",
   },
   ...PRODUCT_CATEGORIES.map(
     (category): SearchItem => ({
       title: category,
-      href: `#products/${categorySlug(category)}`,
+      href: `/products/${categorySlug(category)}`,
       type: "Category",
       keywords: category.toLowerCase(),
     })
@@ -53,7 +53,7 @@ export const searchIndex: SearchItem[] = [
   ...products.map(
     (product): SearchItem => ({
       title: product.name,
-      href: `#product/${product.slug}`,
+      href: `/product/${product.slug}`,
       type: "Product",
       keywords: `${product.categories.join(" ")} ${product.description}`.toLowerCase(),
     })

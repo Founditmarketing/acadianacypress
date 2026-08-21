@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import PageSEO from "../seo/PageSEO";
+import { breadcrumbSchema, locationsSchema } from "../seo/schema";
 import DedicatedCTA from "./DedicatedCTA";
 import Locations from "./Locations";
 import PageHero from "./PageHero";
@@ -50,6 +52,18 @@ export default function LocationsPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
+      <PageSEO
+        title="Our Locations | Acadiana Cypress"
+        description="Visit our Moreauville sawmill or Grand Coteau showroom — addresses, hours, and directions for both Acadiana Cypress locations in South Louisiana."
+        path="/locations"
+        jsonLd={[
+          ...locationsSchema(),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Locations", path: "/locations" },
+          ]),
+        ]}
+      />
       <PageHero
         label="Visit Us"
         title="OUR LOCATIONS"

@@ -9,6 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { LOCATIONS, PHONE_DISPLAY, PHONE_TEL } from "../data/contact";
 
 /** Shared panel content: Call Now on top, quick contact form below. */
@@ -228,8 +229,8 @@ export default function ContactDock() {
               </span>
             </button>
 
-            <a
-              href="#products"
+            <Link
+              to="/products"
               className="flex flex-col items-center gap-1.5 pt-2.5 pb-2 active:scale-95 transition-transform"
             >
               <span className="w-9 h-9 rounded-full border border-white/20 text-white/85 flex items-center justify-center transition-colors active:border-brand-accent active:text-brand-accent">
@@ -238,10 +239,10 @@ export default function ContactDock() {
               <span className="text-[9px] uppercase tracking-[0.2em] text-white/60">
                 Products
               </span>
-            </a>
+            </Link>
 
-            <a
-              href="#locations"
+            <Link
+              to="/locations"
               className="flex flex-col items-center gap-1.5 pt-2.5 pb-2 active:scale-95 transition-transform"
             >
               <span className="w-9 h-9 rounded-full border border-white/20 text-white/85 flex items-center justify-center transition-colors active:border-brand-accent active:text-brand-accent">
@@ -250,7 +251,7 @@ export default function ContactDock() {
               <span className="text-[9px] uppercase tracking-[0.2em] text-white/60">
                 Visit
               </span>
-            </a>
+            </Link>
           </div>
         </nav>
       </div>

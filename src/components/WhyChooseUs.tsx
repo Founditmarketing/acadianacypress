@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
+import { Link } from "react-router-dom";
 import SectionLabel from "./SectionLabel";
 
 export default function WhyChooseUs() {
@@ -35,10 +36,10 @@ export default function WhyChooseUs() {
               <p><strong>Nationwide Delivery</strong> — shipped directly from our mills to your job site anywhere in the USA.</p>
             </li>
           </ul>
-          <a href="#why-cypress" className="inline-flex items-center space-x-4 text-brand-dark hover:text-brand-accent transition-colors group border-b border-brand-dark hover:border-brand-accent pb-2">
+          <Link to="/why-cypress" className="inline-flex items-center space-x-4 text-brand-dark hover:text-brand-accent transition-colors group border-b border-brand-dark hover:border-brand-accent pb-2">
             <span className="font-medium tracking-wider uppercase text-sm">Learn more about our process</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
-          </a>
+          </Link>
         </div>
       </div>
 

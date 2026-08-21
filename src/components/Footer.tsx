@@ -1,4 +1,5 @@
 import { ChevronRight, Facebook } from "lucide-react";
+import { Link } from "react-router-dom";
 import { EMAIL, LOCATIONS } from "../data/contact";
 
 export default function Footer() {
@@ -9,37 +10,37 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 
           <div>
-            <a href="#" className="inline-block">
+            <Link to="/" className="inline-block">
               {/* Logo artwork is black; invert renders it white on the dark footer */}
               <img
                 src="/AcadianaCypressLogo.png"
                 alt="Acadiana Cypress"
                 className="h-28 w-auto invert"
               />
-            </a>
+            </Link>
           </div>
 
           <div>
             <h4 className="font-bold mb-6 text-sm">Products</h4>
             <ul className="space-y-4 text-white/70 font-light text-sm">
-              <li><a href="#products" className="hover:text-brand-accent transition-colors">Browse All</a></li>
-              <li><a href="#products/flooring" className="hover:text-brand-accent transition-colors">Flooring</a></li>
-              <li><a href="#products/lumber" className="hover:text-brand-accent transition-colors">Lumber</a></li>
-              <li><a href="#products/mantels" className="hover:text-brand-accent transition-colors">Mantels</a></li>
-              <li><a href="#products/posts-beams" className="hover:text-brand-accent transition-colors">Posts & Beams</a></li>
-              <li><a href="#products/tongue-groove" className="hover:text-brand-accent transition-colors">Tongue & Groove</a></li>
-              <li><a href="#products/walls-ceilings" className="hover:text-brand-accent transition-colors">Walls & Ceilings</a></li>
-              <li><a href="#products/hunting-blinds" className="hover:text-brand-accent transition-colors">Hunting Blinds</a></li>
+              <li><Link to="/products" className="hover:text-brand-accent transition-colors">Browse All</Link></li>
+              <li><Link to="/products/flooring" className="hover:text-brand-accent transition-colors">Flooring</Link></li>
+              <li><Link to="/products/lumber" className="hover:text-brand-accent transition-colors">Lumber</Link></li>
+              <li><Link to="/products/mantels" className="hover:text-brand-accent transition-colors">Mantels</Link></li>
+              <li><Link to="/products/posts-beams" className="hover:text-brand-accent transition-colors">Posts & Beams</Link></li>
+              <li><Link to="/products/tongue-groove" className="hover:text-brand-accent transition-colors">Tongue & Groove</Link></li>
+              <li><Link to="/products/walls-ceilings" className="hover:text-brand-accent transition-colors">Walls & Ceilings</Link></li>
+              <li><Link to="/products/hunting-blinds" className="hover:text-brand-accent transition-colors">Hunting Blinds</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold mb-6 text-sm">Company</h4>
             <ul className="space-y-4 text-white/70 font-light text-sm">
-              <li><a href="#why-cypress" className="hover:text-brand-accent transition-colors">Why Cypress</a></li>
-              <li><a href="#our-work" className="hover:text-brand-accent transition-colors">Our Work</a></li>
-              <li><a href="#locations" className="hover:text-brand-accent transition-colors">Locations</a></li>
-              <li><a href="#contact-us" className="hover:text-brand-accent transition-colors">Contact Us</a></li>
+              <li><Link to="/why-cypress" className="hover:text-brand-accent transition-colors">Why Cypress</Link></li>
+              <li><Link to="/our-work" className="hover:text-brand-accent transition-colors">Our Work</Link></li>
+              <li><Link to="/locations" className="hover:text-brand-accent transition-colors">Locations</Link></li>
+              <li><Link to="/contact-us" className="hover:text-brand-accent transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -91,8 +92,8 @@ export default function Footer() {
         <div className="pt-8 border-t border-white/20 flex flex-col md:flex-row justify-between items-center text-xs text-white/50 space-y-4 md:space-y-0">
           <p>Acadiana Cypress, All rights reserved</p>
           <div className="flex space-x-6">
-            <a href="#privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#terms-conditions" className="hover:text-white transition-colors">Terms & Conditions</a>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
           </div>
         </div>
       </div>

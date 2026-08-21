@@ -16,6 +16,7 @@ const FacebookCircle = ({ className }: { className?: string }) => (
   </svg>
 );
 import { AnimatePresence, motion } from "motion/react";
+import { Link, useLocation } from "react-router-dom";
 import {
   EMAIL,
   FACEBOOK_URL,
@@ -48,7 +49,7 @@ const slug = (label: string) =>
   label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const productHref = (label: string) =>
-  label === "Browse All" ? "#products" : `#products/${slug(label)}`;
+  label === "Browse All" ? "/products" : `/products/${slug(label)}`;
 
 /** Preview image per mega-menu entry. */
 const productImages: Record<string, string> = {
@@ -63,13 +64,13 @@ const productImages: Record<string, string> = {
 };
 
 const navItems = [
-  { label: "Home", href: "#" },
-  { label: "Why Cypress", href: "#why-cypress" },
-  { label: "Products", href: "#products", dropdown: productLinks },
-  { label: "Browse All", href: "#products" },
-  { label: "Our Work", href: "#our-work" },
-  { label: "Contact Us", href: "#contact-us" },
-  { label: "Locations", href: "#locations" },
+  { label: "Home", href: "/" },
+  { label: "Why Cypress", href: "/why-cypress" },
+  { label: "Products", href: "/products", dropdown: productLinks },
+  { label: "Browse All", href: "/products" },
+  { label: "Our Work", href: "/our-work" },
+  { label: "Contact Us", href: "/contact-us" },
+  { label: "Locations", href: "/locations" },
 ];
 
 export default function Header({ revealed = true }: { revealed?: boolean }) {
@@ -77,7 +78,7 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [phrase, setPhrase] = useState(0);
-  const [route, setRoute] = useState(() => window.location.hash);
+  const { pathname: route } = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [megaOpen, setMegaOpen] = useState(false);
@@ -93,12 +94,6 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
     if (megaCloseTimer.current) clearTimeout(megaCloseTimer.current);
     megaCloseTimer.current = setTimeout(() => setMegaOpen(false), 180);
   };
-
-  useEffect(() => {
-    const onHash = () => setRoute(window.location.hash);
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
 
   // Close the search panel and mega menu when navigating
   useEffect(() => {
@@ -118,12 +113,12 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
   // Pages without a dark hero behind the header need it solid from the top
   // (Why Cypress and Locations have their own page heroes, so they stay transparent)
   const onSubPage =
-    route === "#products" ||
-    route.startsWith("#products/") ||
-    route.startsWith("#product/") ||
-    route === "#contact-us" ||
-    route === "#privacy-policy" ||
-    route === "#terms-conditions";
+    route === "/products" ||
+    route.startsWith("/products/") ||
+    route.startsWith("/product/") ||
+    route === "/contact-us" ||
+    route === "/privacy-policy" ||
+    route === "/terms-conditions";
   const solid = scrolled || onSubPage;
 
   // Rotate the top-bar tagline. The first phrase (our locations) holds for
@@ -217,7 +212,7 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
         <div className="flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] px-6 py-2 max-w-[1920px] mx-auto">
           {/* Left: Logo */}
           <div className="flex-shrink-0 lg:justify-self-start">
-            <a href="#" className="block">
+            <Link to="/" className="block">
               {/* Logo artwork is black; invert renders it white over the hero */}
               <img
                 src="/AcadianaCypressLogo.png"
@@ -226,7 +221,7 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                   solid ? "h-12 lg:h-14" : "h-20 lg:h-24 invert"
                 }`}
               />
-            </a>
+            </Link>
           </div>
 
           {/* Center: Navigation */}
@@ -238,8 +233,8 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                   onMouseEnter={openMega}
                   onMouseLeave={scheduleMegaClose}
                 >
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     className={`flex items-center space-x-1.5 hover:text-brand-accent transition-colors font-medium border-b border-transparent pb-1 ${
                       megaOpen ? "border-brand-accent text-brand-accent" : ""
                     } ${solid ? "text-brand-dark" : "text-white"}`}
@@ -250,18 +245,18 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                         megaOpen ? "rotate-180" : ""
                       }`}
                     />
-                  </a>
+                  </Link>
                 </div>
               ) : (
-                <a
+                <Link
                   key={item.label}
-                  href={item.href}
+                  to={item.href}
                   className={`hover:text-brand-accent transition-colors font-medium border-b border-transparent hover:border-brand-accent pb-1 ${
                     solid ? "text-brand-dark" : "text-white"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               )
             )}
           </nav>
@@ -292,9 +287,9 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
             >
               <Search className="w-5 h-5" />
             </button>
-            <a href="#contact-us" className="hidden sm:inline-flex items-center justify-center px-6 py-2.5 bg-brand-accent text-white hover:bg-[#a36814] transition-colors rounded-none">
+            <Link to="/contact-us" className="hidden sm:inline-flex items-center justify-center px-6 py-2.5 bg-brand-accent text-white hover:bg-[#a36814] transition-colors rounded-none">
               Request Quote
-            </a>
+            </Link>
             {/* Hamburger (mobile/tablet) */}
             <button
               onClick={() => setMenuOpen(true)}
@@ -333,9 +328,9 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                     )}
                     {colIndex === 1 && <div className="h-[34px]" />}
                     {column.map((product) => (
-                      <a
+                      <Link
                         key={product}
-                        href={productHref(product)}
+                        to={productHref(product)}
                         onMouseEnter={() => setMegaPreview(product)}
                         className={`group/item flex items-center justify-between py-3 border-b border-gray-100 transition-colors ${
                           megaPreview === product
@@ -353,15 +348,15 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                               : "opacity-0 -translate-x-2"
                           }`}
                         />
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )
               )}
 
               {/* Preview image column */}
-              <a
-                href={productHref(megaPreview)}
+              <Link
+                to={productHref(megaPreview)}
                 className="relative block overflow-hidden bg-brand-dark aspect-[4/3] group/preview"
               >
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -390,7 +385,7 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                     View
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
@@ -437,8 +432,8 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                     <ul className="divide-y divide-gray-100">
                       {searchSite(query).map((result) => (
                         <li key={result.href}>
-                          <a
-                            href={result.href}
+                          <Link
+                            to={result.href}
                             onClick={() => {
                               setSearchOpen(false);
                               setQuery("");
@@ -451,7 +446,7 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                             <span className="text-[10px] uppercase tracking-[0.2em] text-brand-dark/40 flex-shrink-0 ml-6">
                               {result.type}
                             </span>
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -534,13 +529,13 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                               >
                                 {item.dropdown.map((product) => (
                                   <li key={product}>
-                                    <a
-                                      href={productHref(product)}
+                                    <Link
+                                      to={productHref(product)}
                                       onClick={() => setMenuOpen(false)}
                                       className="block py-2.5 text-base font-light text-white/80 hover:text-brand-accent transition-colors"
                                     >
                                       {product}
-                                    </a>
+                                    </Link>
                                   </li>
                                 ))}
                               </motion.ul>
@@ -548,13 +543,13 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
                           </AnimatePresence>
                         </div>
                       ) : (
-                        <a
-                          href={item.href}
+                        <Link
+                          to={item.href}
                           onClick={() => setMenuOpen(false)}
                           className="block py-3 text-2xl font-light tracking-wide hover:text-brand-accent transition-colors"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       )}
                     </motion.li>
                   ))}
@@ -563,22 +558,22 @@ export default function Header({ revealed = true }: { revealed?: boolean }) {
 
               {/* Drawer footer */}
               <div className="px-6 py-6 border-t border-white/10 space-y-4">
-                <a
-                  href="#contact-us"
+                <Link
+                  to="/contact-us"
                   onClick={() => setMenuOpen(false)}
                   className="w-full inline-flex items-center justify-center px-6 py-3.5 bg-brand-accent text-white hover:bg-[#a36814] transition-colors font-medium tracking-wide"
                 >
                   Request Quote
-                </a>
+                </Link>
                 <div className="space-y-2 text-sm text-white/70 font-light">
-                  <a
-                    href="#locations"
+                  <Link
+                    to="/locations"
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center space-x-3 hover:text-brand-accent transition-colors"
                   >
                     <MapPin className="w-4 h-4 text-brand-accent" />
                     <span>Moreauville &amp; Grand Coteau, LA</span>
-                  </a>
+                  </Link>
                   <a
                     href={FACEBOOK_URL}
                     target="_blank"

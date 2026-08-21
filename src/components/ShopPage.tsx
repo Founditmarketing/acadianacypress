@@ -1,15 +1,15 @@
 import { motion } from "motion/react";
+import { Link, useParams } from "react-router-dom";
 import {
   PRODUCT_CATEGORIES,
   categorySlug,
   products,
 } from "../data/products";
+import PageSEO from "../seo/PageSEO";
+import { breadcrumbSchema } from "../seo/schema";
 import SectionLabel from "./SectionLabel";
 
-interface ShopPageProps {
-  /** Active category slug, or undefined for all products. */
-  category?: string;
-}
+const MotionLink = motion.create(Link);
 
 // Only categories that actually contain products, with live counts,
 // so the filters always match the catalog exactly.
@@ -17,7 +17,8 @@ const countFor = (cat: string) =>
   products.filter((p) => (p.categories as string[]).includes(cat)).length;
 const filterCategories = PRODUCT_CATEGORIES.filter((c) => countFor(c) > 0);
 
-export default function ShopPage({ category }: ShopPageProps) {
+export default function ShopPage() {
+  const { category } = useParams<{ category?: string }>();
   const activeCategory = filterCategories.find(
     (c) => categorySlug(c) === category
   );
@@ -25,8 +26,26 @@ export default function ShopPage({ category }: ShopPageProps) {
     ? products.filter((p) => p.categories.includes(activeCategory))
     : products;
 
+  const title = activeCategory
+    ? `${activeCategory} | Acadiana Cypress`
+    : "Shop All Cypress Products | Acadiana Cypress";
+  const description = activeCategory
+    ? `Browse our ${activeCategory.toLowerCase()} — mill-direct Louisiana cypress, milled in South Louisiana. Call or message us for pricing.`
+    : "Browse mill-direct Louisiana cypress: flooring, lumber, mantels, posts & beams, tongue & groove, walls & ceilings, and hunting blinds.";
+  const path = activeCategory ? `/products/${categorySlug(activeCategory)}` : "/products";
+
   return (
     <section className="bg-white pt-44 lg:pt-52 pb-24 px-6 md:px-12 lg:px-24 max-w-[1920px] mx-auto min-h-screen">
+      <PageSEO
+        title={title}
+        description={description}
+        path={path}
+        jsonLd={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Products", path: "/products" },
+          ...(activeCategory ? [{ name: activeCategory, path }] : []),
+        ])}
+      />
       <SectionLabel>Our Products</SectionLabel>
       <h1 className="title-serif text-brand-dark text-4xl md:text-6xl tracking-tight mb-6">
         {activeCategory ? activeCategory.toUpperCase() : "BROWSE ALL"}
@@ -44,9 +63,9 @@ export default function ShopPage({ category }: ShopPageProps) {
             cat === "All" ? !activeCategory : cat === activeCategory;
           const count = cat === "All" ? products.length : countFor(cat);
           return (
-            <a
+            <Link
               key={cat}
-              href={cat === "All" ? "#products" : `#products/${categorySlug(cat)}`}
+              to={cat === "All" ? "/products" : `/products/${categorySlug(cat)}`}
               className={`inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-brand-dark border-brand-dark text-white"
@@ -61,7 +80,7 @@ export default function ShopPage({ category }: ShopPageProps) {
               >
                 {count}
               </span>
-            </a>
+            </Link>
           );
         })}
       </div>
@@ -69,9 +88,9 @@ export default function ShopPage({ category }: ShopPageProps) {
       {/* Product grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
         {visible.map((product, i) => (
-          <motion.a
+          <MotionLink
             key={product.slug}
-            href={`#product/${product.slug}`}
+            to={`/product/${product.slug}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: Math.min(i * 0.05, 0.4) }}
@@ -100,7 +119,7 @@ export default function ShopPage({ category }: ShopPageProps) {
                 Contact us for pricing
               </p>
             </div>
-          </motion.a>
+          </MotionLink>
         ))}
       </div>
 

@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { Check, Clock, Mail, MapPin, Phone, Send } from "lucide-react";
 import { EMAIL, FACEBOOK_URL, LOCATIONS } from "../data/contact";
+import PageSEO from "../seo/PageSEO";
+import { breadcrumbSchema } from "../seo/schema";
 import SectionLabel from "./SectionLabel";
 
 export default function ContactPage() {
@@ -22,6 +24,15 @@ export default function ContactPage() {
 
   return (
     <div className="bg-white pt-44 lg:pt-52 pb-24 min-h-screen">
+      <PageSEO
+        title="Contact Us | Acadiana Cypress"
+        description="Call, message, or visit us at our Moreauville sawmill or Grand Coteau showroom for pricing, samples, and custom milling."
+        path="/contact-us"
+        jsonLd={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Contact Us", path: "/contact-us" },
+        ])}
+      />
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
         {/* Page header */}
         <div className="text-center mb-16">

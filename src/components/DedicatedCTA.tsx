@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import SectionLabel from "./SectionLabel";
 
 export default function DedicatedCTA() {
@@ -21,9 +22,9 @@ export default function DedicatedCTA() {
         <p className="text-white/80 text-lg md:text-xl font-light mb-10 max-w-3xl mx-auto">
           Contact us for pricing, samples, or custom milling requests.
         </p>
-        <a href="#contact-us" className="inline-flex items-center justify-center bg-brand-accent text-white px-10 py-4 hover:bg-[#a36814] transition-colors rounded-none font-medium tracking-wide text-lg shadow-lg">
+        <Link to="/contact-us" className="inline-flex items-center justify-center bg-brand-accent text-white px-10 py-4 hover:bg-[#a36814] transition-colors rounded-none font-medium tracking-wide text-lg shadow-lg">
           REQUEST A QUOTE
-        </a>
+        </Link>
       </div>
     </section>
   );

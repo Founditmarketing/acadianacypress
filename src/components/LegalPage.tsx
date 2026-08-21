@@ -1,4 +1,5 @@
 import { EMAIL, LOCATIONS, PHONE_DISPLAY } from "../data/contact";
+import PageSEO from "../seo/PageSEO";
 import SectionLabel from "./SectionLabel";
 
 interface LegalSection {
@@ -108,10 +109,21 @@ const content: Record<
   },
 };
 
+const seoTitle: Record<"privacy" | "terms", string> = {
+  privacy: "Privacy Policy",
+  terms: "Terms & Conditions",
+};
+
 export default function LegalPage({ page }: { page: "privacy" | "terms" }) {
   const { label, title, intro, sections } = content[page];
+  const path = page === "privacy" ? "/privacy-policy" : "/terms-conditions";
   return (
     <div className="bg-white pt-44 lg:pt-52 pb-24 min-h-screen">
+      <PageSEO
+        title={`${seoTitle[page]} | Acadiana Cypress`}
+        description={intro}
+        path={path}
+      />
       <div className="max-w-3xl mx-auto px-6">
         <SectionLabel>{label}</SectionLabel>
         <h1 className="title-serif text-brand-dark text-4xl md:text-5xl tracking-tight mb-6">

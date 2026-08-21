@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, MessageSquare, Phone } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { Link, useParams } from "react-router-dom";
 import { categorySlug, getProduct, products } from "../data/products";
 import { EMAIL, PHONE_DISPLAY, PHONE_TEL } from "../data/contact";
+import PageSEO from "../seo/PageSEO";
+import { breadcrumbSchema, productSchema } from "../seo/schema";
 
-interface ProductPageProps {
-  slug: string;
-}
-
-export default function ProductPage({ slug }: ProductPageProps) {
+export default function ProductPage() {
+  const { slug = "" } = useParams<{ slug: string }>();
   const product = getProduct(slug);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -20,16 +20,22 @@ export default function ProductPage({ slug }: ProductPageProps) {
   if (!product) {
     return (
       <section className="pt-44 lg:pt-52 pb-24 px-6 md:px-12 lg:px-24 max-w-[1920px] mx-auto min-h-screen">
+        <PageSEO
+          title="Product Not Found | Acadiana Cypress"
+          description="This product could not be found. Browse our full catalog of mill-direct Louisiana cypress."
+          path={`/product/${slug}`}
+          noIndex
+        />
         <h1 className="text-brand-dark text-4xl font-light mb-6">
           Product not found
         </h1>
-        <a
-          href="#products"
+        <Link
+          to="/products"
           className="inline-flex items-center space-x-2 text-brand-accent hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to all products</span>
-        </a>
+        </Link>
       </section>
     );
   }
@@ -44,14 +50,29 @@ export default function ProductPage({ slug }: ProductPageProps) {
 
   return (
     <section className="bg-white pt-40 lg:pt-48 pb-24 px-6 md:px-12 lg:px-24 max-w-[1920px] mx-auto min-h-screen">
+      <PageSEO
+        title={`${product.name} | Acadiana Cypress`}
+        description={product.description}
+        path={`/product/${product.slug}`}
+        image={product.images[0]}
+        jsonLd={[
+          productSchema(product),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Products", path: "/products" },
+            { name: product.categories[0], path: `/products/${categorySlug(product.categories[0])}` },
+            { name: product.name, path: `/product/${product.slug}` },
+          ]),
+        ]}
+      />
       {/* Breadcrumb */}
-      <a
-        href="#products"
+      <Link
+        to="/products"
         className="inline-flex items-center space-x-2 text-sm text-brand-dark/60 hover:text-brand-accent transition-colors mb-10 group"
       >
         <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
         <span>Back to all products</span>
-      </a>
+      </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Gallery */}
@@ -99,13 +120,13 @@ export default function ProductPage({ slug }: ProductPageProps) {
         <div className="max-w-xl">
           <div className="flex flex-wrap gap-2 mb-5">
             {product.categories.map((cat) => (
-              <a
+              <Link
                 key={cat}
-                href={`#products/${categorySlug(cat)}`}
+                to={`/products/${categorySlug(cat)}`}
                 className="text-xs uppercase tracking-wider text-brand-dark/60 border border-gray-200 px-3 py-1.5 hover:border-brand-accent hover:text-brand-accent transition-colors"
               >
                 {cat}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -157,7 +178,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {related.map((p) => (
-              <a key={p.slug} href={`#product/${p.slug}`} className="group block">
+              <Link key={p.slug} to={`/product/${p.slug}`} className="group block">
                 <div className="aspect-[4/5] overflow-hidden bg-brand-dark mb-4">
                   <img
                     src={p.images[0]}
@@ -172,7 +193,7 @@ export default function ProductPage({ slug }: ProductPageProps) {
                 <p className="text-brand-accent text-sm font-medium mt-1">
                   Contact us for pricing
                 </p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

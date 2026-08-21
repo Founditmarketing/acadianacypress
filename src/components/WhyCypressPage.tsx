@@ -1,5 +1,7 @@
 import { ArrowRight, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 import { PHONE_DISPLAY, PHONE_TEL } from "../data/contact";
+import PageSEO from "../seo/PageSEO";
 import DedicatedCTA from "./DedicatedCTA";
 import PageHero from "./PageHero";
 
@@ -46,6 +48,11 @@ function FramedImage({
 export default function WhyCypressPage() {
   return (
     <div className="bg-white min-h-screen">
+      <PageSEO
+        title="Why Cypress | Acadiana Cypress"
+        description="Louisiana's state tree, milled for durability. Learn why bald cypress resists rot and insects and how it's built to outlast in Louisiana's climate."
+        path="/why-cypress"
+      />
       {/* Hero */}
       <PageHero
         label="Why Cypress"
@@ -135,13 +142,13 @@ export default function WhyCypressPage() {
               <Phone className="w-4 h-4" />
               <span>Call {PHONE_DISPLAY}</span>
             </a>
-            <a
-              href="#products"
+            <Link
+              to="/products"
               className="inline-flex items-center justify-center space-x-3 border border-brand-dark text-brand-dark px-8 py-4 hover:bg-brand-dark hover:text-white transition-colors font-medium tracking-widest text-sm uppercase"
             >
               <span>Browse Products</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

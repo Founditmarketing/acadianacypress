@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { products, type ProductCategory } from "../data/products";
 import SectionLabel from "./SectionLabel";
 
@@ -12,43 +13,43 @@ const cards: {
     title: "Walls & Ceilings",
     subtitle: "Shiplap, Kentucky finishes & reclaimed looks",
     image: "/products/cypress-shiplap/01.jpg",
-    href: "#products/walls-ceilings",
+    href: "/products/walls-ceilings",
   },
   {
     title: "Flooring",
     subtitle: "Antique pine, oak & reclaimed hardwoods",
     image: "/acadiana-floor2.jpg",
-    href: "#products/flooring",
+    href: "/products/flooring",
   },
   {
     title: "Lumber",
     subtitle: "New, sinker & pecky cypress",
     image: "/products/sinker-cypress/01.jpg",
-    href: "#products/lumber",
+    href: "/products/lumber",
   },
   {
     title: "Posts & Beams",
     subtitle: "6×6 to 12×12, milled to order",
     image: "/products/cypress-post-beams/01.jpg",
-    href: "#products/posts-beams",
+    href: "/products/posts-beams",
   },
   {
     title: "Tongue & Groove",
     subtitle: "Classic & tight-fit profiles",
     image: "/products/tg-cypress/01.jpg",
-    href: "#products/tongue-groove",
+    href: "/products/tongue-groove",
   },
   {
     title: "Mantels",
     subtitle: "One-of-a-kind fireplace pieces",
     image: "/products/fireplace-mantels/01.jpg",
-    href: "#products/mantels",
+    href: "/products/mantels",
   },
   {
     title: "Hunting Blinds",
     subtitle: "Custom cypress comfort in the field",
     image: "/products/hunting-blinds/01.jpg",
-    href: "#products/hunting-blinds",
+    href: "/products/hunting-blinds",
   },
 ];
 
@@ -80,13 +81,13 @@ export default function Services() {
               milled, dried, and finished in-house at our Louisiana sawmill.
             </p>
           </div>
-          <a
-            href="#products"
+          <Link
+            to="/products"
             className="hidden md:inline-flex items-center space-x-3 text-sm font-medium tracking-wider uppercase text-brand-dark hover:text-brand-accent transition-colors border-b border-brand-dark/30 hover:border-brand-accent pb-1 whitespace-nowrap ml-8"
           >
             <span>Browse All</span>
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
 
         {/* Horizontal Scroll Area */}
@@ -94,9 +95,9 @@ export default function Services() {
           {cards.map((card, index) => {
             const count = countFor(card.title);
             return (
-              <a
+              <Link
                 key={card.title}
-                href={card.href}
+                to={card.href}
                 className="group relative flex-none w-[72vw] sm:w-[380px] md:w-[440px] lg:w-[480px] h-[430px] md:h-[600px] overflow-hidden snap-center bg-brand-dark"
               >
                 {/* Image */}
@@ -139,7 +140,7 @@ export default function Services() {
                     </span>
                   </div>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

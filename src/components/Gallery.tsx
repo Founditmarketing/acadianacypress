@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Expand, Play, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router-dom";
 import SectionLabel from "./SectionLabel";
 
 interface GalleryEntry {
@@ -148,12 +149,12 @@ export default function Gallery() {
 
       {/* View More */}
       <div className="flex justify-center mt-14">
-        <a
-          href="#our-work"
+        <Link
+          to="/our-work"
           className="inline-flex items-center justify-center border border-brand-dark text-brand-dark px-10 py-4 hover:bg-brand-dark hover:text-white transition-colors font-medium tracking-widest text-sm uppercase"
         >
           View More
-        </a>
+        </Link>
       </div>
 
       {/* Lightbox */}

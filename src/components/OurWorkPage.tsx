@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Expand, Play, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { products } from "../data/products";
+import PageSEO from "../seo/PageSEO";
 import DedicatedCTA from "./DedicatedCTA";
 import PageHero from "./PageHero";
 
@@ -36,7 +38,7 @@ const tiles: WorkTile[] = [
     image: product.images[0],
     caption: product.name,
     category: product.categories[0],
-    href: `#product/${product.slug}`,
+    href: `/product/${product.slug}`,
   })),
 ];
 
@@ -65,6 +67,11 @@ export default function OurWorkPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      <PageSEO
+        title="Our Work | Acadiana Cypress"
+        description="A gallery of finished cypress projects — beam porches, reclaimed hardwood floors, rustic kitchens, and custom furniture milled in South Louisiana."
+        path="/our-work"
+      />
       <PageHero
         label="Project Gallery"
         title="OUR WORK"
@@ -194,14 +201,14 @@ export default function OurWorkPage() {
                   </span>
                 </p>
                 {tiles[lightbox].href && (
-                  <a
-                    href={tiles[lightbox].href}
+                  <Link
+                    to={tiles[lightbox].href}
                     onClick={() => setLightbox(null)}
                     className="inline-flex items-center space-x-2 mt-4 text-sm font-medium tracking-wider uppercase text-white border-b border-brand-accent pb-1 hover:text-brand-accent transition-colors"
                   >
                     <span>View Product</span>
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </Link>
                 )}
               </div>
             </motion.div>

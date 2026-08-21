@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import TrustBanner from './components/TrustBanner';
@@ -89,6 +90,7 @@ export default function App() {
       {/* Spacer so the mobile sticky action bar never covers page content */}
       <div className="h-20 lg:hidden" />
       <ContactDock />
+      <Analytics />
     </div>
   );
 }

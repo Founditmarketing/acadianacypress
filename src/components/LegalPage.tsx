@@ -1,4 +1,4 @@
-import { EMAIL, LOCATIONS, PHONE_DISPLAY } from "../data/contact";
+import { EMAILS, LOCATIONS, PHONE_DISPLAY } from "../data/contact";
 import PageSEO from "../seo/PageSEO";
 import SectionLabel from "./SectionLabel";
 
@@ -156,13 +156,18 @@ export default function LegalPage({ page }: { page: "privacy" | "terms" }) {
             </h2>
             <p className="text-brand-dark/75 font-light leading-relaxed">
               Reach us at{" "}
-              <a
-                href={`mailto:${EMAIL}`}
-                className="text-brand-accent hover:underline"
-              >
-                {EMAIL}
-              </a>{" "}
-              or {PHONE_DISPLAY}, or stop by our {LOCATIONS[1].city} showroom or{" "}
+              {EMAILS.map((email, index) => (
+                <span key={email}>
+                  {index > 0 && ", "}
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-brand-accent hover:underline break-all"
+                  >
+                    {email}
+                  </a>
+                </span>
+              ))}
+              , or {PHONE_DISPLAY}, or stop by our {LOCATIONS[1].city} showroom or{" "}
               {LOCATIONS[0].city} sawmill.
             </p>
           </div>

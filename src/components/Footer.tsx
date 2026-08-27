@@ -1,6 +1,6 @@
 import { ChevronRight, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
-import { EMAIL, LOCATIONS } from "../data/contact";
+import { EMAILS, LOCATIONS } from "../data/contact";
 
 export default function Footer() {
   return (
@@ -68,14 +68,16 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
-              <li>
-                <a
-                  href={`mailto:${EMAIL}`}
-                  className="hover:text-brand-accent transition-colors"
-                >
-                  {EMAIL}
-                </a>
-              </li>
+              {EMAILS.map((email) => (
+                <li key={email}>
+                  <a
+                    href={`mailto:${email}`}
+                    className="hover:text-brand-accent transition-colors break-all"
+                  >
+                    {email}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -81,7 +81,7 @@ export default function LocationsPage() {
             </h2>
             <p className="text-brand-dark/80 font-light text-lg md:text-xl leading-relaxed">
               Acadiana Cypress is proud to announce the opening of our new
-              store located on the I-49 South Service Road in Grand Coteau, LA!
+              store located at 1789 I-49 South Service Road in Grand Coteau, LA!
               Known for our high-quality cypress lumber, beams, and custom wood
               products, we're excited to bring our craftsmanship even closer to
               our customers. Whether you're a contractor, builder, or DIY
@@ -103,7 +103,7 @@ export default function LocationsPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
               <p className="absolute bottom-5 left-5 bg-brand-dark/85 backdrop-blur-sm text-white text-[11px] uppercase tracking-[0.25em] px-4 py-2.5">
-                I-49 South Service Rd, Grand Coteau
+                1789 I-49 South Service Rd, Grand Coteau
               </p>
               <div className="pointer-events-none absolute inset-3 border border-white/40 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500" />
             </div>

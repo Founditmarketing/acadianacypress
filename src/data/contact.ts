@@ -1,5 +1,8 @@
 // Single source of truth for business contact info.
 export const EMAIL = "codycoco_1@yahoo.com";
+/** Company inbox, shown alongside the primary email on contact surfaces. */
+export const EMAIL_COMPANY = "acadianacypressco@gmail.com";
+export const EMAILS = [EMAIL, EMAIL_COMPANY];
 export const FACEBOOK_URL =
   "https://www.facebook.com/profile.php?id=100076284221092";
 
@@ -43,7 +46,7 @@ export const LOCATIONS: LocationInfo[] = [
     key: "showroom",
     label: "Showroom",
     city: "Grand Coteau",
-    addressLines: ["I 49 South Service Rd", "Grand Coteau, LA 70451"],
+    addressLines: ["1789 I-49 South Service Rd", "Grand Coteau, LA 70451"],
     hours: [
       "9:00 am – 5:00 pm, Monday – Friday",
       "Saturday by appointment only",
@@ -54,6 +57,6 @@ export const LOCATIONS: LocationInfo[] = [
     phoneContact: "Priscilla",
     mapsUrl:
       "https://www.google.com/maps/search/?api=1&query=" +
-      encodeURIComponent("I 49 South Service Rd, Grand Coteau, LA 70451"),
+      encodeURIComponent("1789 I-49 South Service Rd, Grand Coteau, LA 70451"),
   },
 ];

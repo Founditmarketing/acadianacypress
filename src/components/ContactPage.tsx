@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Check, Clock, Mail, MapPin, Phone, Send } from "lucide-react";
-import { EMAIL, FACEBOOK_URL, LOCATIONS } from "../data/contact";
+import { EMAIL, EMAILS, FACEBOOK_URL, LOCATIONS } from "../data/contact";
 import PageSEO from "../seo/PageSEO";
 import { breadcrumbSchema } from "../seo/schema";
 import SectionLabel from "./SectionLabel";
@@ -99,12 +99,17 @@ export default function ContactPage() {
             )}
             <p className="text-brand-dark/50 font-light text-sm mt-4">
               Or email us directly at{" "}
-              <a
-                href={`mailto:${EMAIL}`}
-                className="text-brand-accent hover:underline"
-              >
-                {EMAIL}
-              </a>
+              {EMAILS.map((email, index) => (
+                <span key={email}>
+                  {index > 0 && " or "}
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-brand-accent hover:underline break-all"
+                  >
+                    {email}
+                  </a>
+                </span>
+              ))}
               , or find us on{" "}
               <a
                 href={FACEBOOK_URL}
@@ -152,13 +157,20 @@ export default function ContactPage() {
                       {location.phoneDisplay} ({location.phoneContact})
                     </span>
                   </a>
-                  <a
-                    href={`mailto:${EMAIL}`}
-                    className="flex items-start space-x-3 text-brand-dark/75 hover:text-brand-accent transition-colors"
-                  >
+                  <div className="flex items-start space-x-3 text-brand-dark/75">
                     <Mail className="w-4 h-4 text-brand-accent mt-0.5 flex-shrink-0" />
-                    <span className="font-light">{EMAIL}</span>
-                  </a>
+                    <div className="flex flex-col gap-1">
+                      {EMAILS.map((email) => (
+                        <a
+                          key={email}
+                          href={`mailto:${email}`}
+                          className="font-light hover:text-brand-accent transition-colors break-all"
+                        >
+                          {email}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                   <div className="flex items-start space-x-3 text-brand-dark/75">
                     <Clock className="w-4 h-4 text-brand-accent mt-0.5 flex-shrink-0" />
                     <div className="font-light space-y-0.5">

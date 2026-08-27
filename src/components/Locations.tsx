@@ -1,5 +1,5 @@
 import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
-import { EMAIL, LOCATIONS } from "../data/contact";
+import { EMAILS, LOCATIONS } from "../data/contact";
 import SectionLabel from "./SectionLabel";
 
 export default function Locations({ showHeader = true }: { showHeader?: boolean }) {
@@ -87,12 +87,17 @@ export default function Locations({ showHeader = true }: { showHeader?: boolean 
                     <Mail className="w-3.5 h-3.5 text-brand-accent" />
                     Email
                   </p>
-                  <a
-                    href={`mailto:${EMAIL}`}
-                    className="text-brand-dark/80 font-light hover:text-brand-accent transition-colors break-all"
-                  >
-                    {EMAIL}
-                  </a>
+                  <div className="flex flex-col gap-1">
+                    {EMAILS.map((email) => (
+                      <a
+                        key={email}
+                        href={`mailto:${email}`}
+                        className="text-brand-dark/80 font-light hover:text-brand-accent transition-colors break-all"
+                      >
+                        {email}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 

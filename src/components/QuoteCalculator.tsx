@@ -3,22 +3,20 @@ import { Check, ChevronDown, ClipboardList, Plus, Send, Trash2, X } from "lucide
 import { EMAIL } from "../data/contact";
 import {
   LUMBER_LINES,
-  PRICING_IS_PRELIMINARY,
-  formatUSD,
-  pricePiece,
+  boardFeet,
+  formatBF,
   skuKey,
   type CrossSection,
   type LumberLine,
 } from "../data/pricing";
 import SectionLabel from "./SectionLabel";
 
-interface EstimateItem {
+interface QuoteItem {
   key: string;
   lineId: string;
   lineName: string;
   label: string; // e.g. "1×6×12"
   qty: number;
-  unitPrice: number;
   boardFeet: number;
 }
 
@@ -29,7 +27,7 @@ const dimLabel = (section: CrossSection, lengthFt: number) =>
 const CUES: [string, string][] = [
   ["Milled in-house", "Cut & dried at our Louisiana sawmill."],
   ["Priced by the board foot", "Every piece figured on real footage — no guesswork."],
-  ["Confirmed by our team", "Freight & finishing finalized by a person, not a bot."],
+  ["Confirmed by our team", "Current pricing, freight & finishing quoted by a person, not a bot."],
 ];
 
 export default function QuoteCalculator() {
@@ -42,11 +40,11 @@ export default function QuoteCalculator() {
   const [sectionIdx, setSectionIdx] = useState(0);
   const [lengthFt, setLengthFt] = useState(line.lengths[Math.floor(line.lengths.length / 2)]);
   const [qty, setQty] = useState(1);
-  const [items, setItems] = useState<EstimateItem[]>([]);
+  const [items, setItems] = useState<QuoteItem[]>([]);
   const listRef = useRef<HTMLUListElement>(null);
   const [buyerName, setBuyerName] = useState("");
   const [buyerContact, setBuyerContact] = useState("");
-  const [estimateSubmitted, setEstimateSubmitted] = useState(false);
+  const [quoteSubmitted, setQuoteSubmitted] = useState(false);
 
   // Keep the cross-section / length selections valid when the product line changes.
   const section = line.crossSections[sectionIdx] ?? line.crossSections[0];
@@ -62,11 +60,11 @@ export default function QuoteCalculator() {
     setLengthFt(next.lengths[Math.floor(next.lengths.length / 2)]);
   };
 
-  const priced = pricePiece(line, section, activeLength);
+  const pieceBF = boardFeet(section.t, section.w, activeLength);
   const safeQty = Number.isFinite(qty) && qty > 0 ? Math.floor(qty) : 0;
-  const lineTotal = priced.unitPrice * safeQty;
+  const selectionBF = pieceBF * safeQty;
 
-  const addToEstimate = () => {
+  const addToQuote = () => {
     if (safeQty < 1) return;
     const key = `${line.id}-${skuKey(section.t, section.w, activeLength)}`;
     setItems((prev) => {
@@ -84,8 +82,7 @@ export default function QuoteCalculator() {
           lineName: line.name,
           label: dimLabel(section, activeLength),
           qty: safeQty,
-          unitPrice: priced.unitPrice,
-          boardFeet: priced.boardFeet,
+          boardFeet: pieceBF,
         },
       ];
     });
@@ -94,10 +91,7 @@ export default function QuoteCalculator() {
   const removeItem = (key: string) =>
     setItems((prev) => prev.filter((it) => it.key !== key));
 
-  const estimateTotal = items.reduce(
-    (sum, it) => sum + it.unitPrice * it.qty,
-    0
-  );
+  const totalBF = items.reduce((sum, it) => sum + it.boardFeet * it.qty, 0);
 
   // Keep the newest line in view when the (scroll-capped) ledger grows.
   useEffect(() => {
@@ -105,43 +99,35 @@ export default function QuoteCalculator() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [items]);
 
-  const estimateLines = () =>
+  const quoteLines = () =>
     items.map(
       (it) =>
-        `${it.qty} x ${it.lineName} ${it.label} @ ${formatUSD(
-          it.unitPrice
-        )}/ea = ${formatUSD(it.unitPrice * it.qty)}`
+        `${it.qty} x ${it.lineName} ${it.label} (${formatBF(
+          it.boardFeet
+        )} bf each) = ${formatBF(it.boardFeet * it.qty)} bf`
     );
 
-  const estimateSummary = () =>
-    [
-      ...estimateLines(),
-      `Estimated subtotal: ${formatUSD(estimateTotal)}`,
-      PRICING_IS_PRELIMINARY
-        ? "(Preliminary estimate — not a final quote.)"
-        : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+  const quoteSummary = () =>
+    [...quoteLines(), `Total board feet: ${formatBF(totalBF)}`].join("\n");
 
-  const submitEstimate = (e: FormEvent<HTMLFormElement>) => {
+  const submitQuote = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setEstimateSubmitted(true);
+    setQuoteSubmitted(true);
     setBuyerName("");
     setBuyerContact("");
   };
 
   const mailtoHref = () => {
     const subject = encodeURIComponent(
-      "Lumber quote request (from website calculator)"
+      "Lumber quote request (from website)"
     );
     const body = encodeURIComponent(
       [
         "Hi Acadiana Cypress team,",
         "",
-        "I put together the following estimate on your website and would like to confirm pricing and availability:",
+        "I put together the following list on your website and would like current pricing and availability:",
         "",
-        estimateSummary(),
+        quoteSummary(),
         "",
         "Name:",
         "Phone:",
@@ -156,12 +142,6 @@ export default function QuoteCalculator() {
     "w-full border border-brand-dark/15 bg-white py-2.5 text-sm font-medium text-brand-dark focus:outline-none focus:border-brand-accent transition-colors rounded-none";
   const labelClasses =
     "block text-[10px] uppercase tracking-[0.18em] text-brand-dark/45 mb-1.5";
-
-  const preliminaryChip = PRICING_IS_PRELIMINARY ? (
-    <span className="inline-flex items-center border border-brand-accent/40 text-brand-accent text-[9px] font-semibold uppercase tracking-[0.2em] px-2 py-0.5">
-      Preliminary
-    </span>
-  ) : null;
 
   return (
     <section
@@ -182,13 +162,13 @@ export default function QuoteCalculator() {
         {/* ── LEFT — editorial pitch ──────────────────────────────────── */}
         <div className="min-w-0 lg:col-span-5 flex flex-col justify-between">
           <div>
-            <SectionLabel>Instant Pricing</SectionLabel>
+            <SectionLabel>Fast Quotes</SectionLabel>
             <h2 className="title-serif text-white text-4xl md:text-5xl leading-[1.05] tracking-tight mb-6">
-              LUMBER QUOTE CALCULATOR
+              BUILD YOUR LUMBER QUOTE
             </h2>
             <p className="text-white/70 text-lg md:text-xl font-light leading-relaxed max-w-md">
-              Pick a size, set a quantity, and see a live cypress estimate —
-              priced the way we mill it, by the board foot.
+              Pick your sizes, set quantities, and send us the list — we'll
+              come back with current pricing and availability.
             </p>
           </div>
 
@@ -209,7 +189,7 @@ export default function QuoteCalculator() {
           </ul>
         </div>
 
-        {/* ── RIGHT — calculator card ─────────────────────────────────── */}
+        {/* ── RIGHT — quote-builder card ──────────────────────────────── */}
         <div className="min-w-0 lg:col-span-7">
           <div className="bg-white shadow-2xl">
             {/* Builder */}
@@ -295,36 +275,31 @@ export default function QuoteCalculator() {
               </div>
 
               <p className="text-xs font-light text-brand-dark/45 mt-4">
-                Estimating{" "}
+                Selected{" "}
                 <span className="font-medium text-brand-dark/70">
                   {line.name} {dimLabel(section, activeLength)}
                 </span>{" "}
-                —{" "}
-                {priced.boardFeet.toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                })}{" "}
-                board feet per piece.
+                — {formatBF(pieceBF)} board feet per piece.
               </p>
             </div>
 
-            {/* Live price bar */}
+            {/* Live footage bar */}
             <div className="flex flex-wrap items-end justify-between gap-4 px-6 md:px-8 py-5 border-t border-brand-dark/10 bg-gray-50">
               <div>
                 <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-brand-dark/50 mb-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse" />
-                  Estimated Price
-                  {preliminaryChip}
+                  Board Footage
                 </span>
                 <span className="title-serif text-brand-dark text-4xl leading-none tabular-nums transition-all duration-200">
-                  {formatUSD(lineTotal)}
+                  {formatBF(selectionBF)} bf
                 </span>
                 <span className="block text-sm font-light text-brand-dark/55 mt-1 tabular-nums">
-                  {formatUSD(priced.unitPrice)} each × {safeQty}
+                  {formatBF(pieceBF)} bf each × {safeQty}
                 </span>
               </div>
               <button
                 type="button"
-                onClick={addToEstimate}
+                onClick={addToQuote}
                 disabled={safeQty < 1}
                 className="inline-flex items-center gap-2 bg-brand-dark text-white px-5 py-3.5 hover:bg-brand-accent transition-colors text-xs font-medium uppercase tracking-widest disabled:opacity-40 disabled:cursor-not-allowed"
               >
@@ -338,7 +313,7 @@ export default function QuoteCalculator() {
               <div className="border-t border-brand-dark/10">
                 <div className="flex items-center justify-between px-6 md:px-8 pt-5 pb-3">
                   <span className="text-[11px] uppercase tracking-[0.25em] text-brand-dark/50">
-                    Your Estimate
+                    Your Quote List
                   </span>
                   <button
                     type="button"
@@ -368,11 +343,11 @@ export default function QuoteCalculator() {
                             {it.lineName} {it.label}
                           </span>
                           <span className="block text-xs font-light text-brand-dark/45">
-                            {formatUSD(it.unitPrice)} each
+                            {formatBF(it.boardFeet)} bf each
                           </span>
                         </span>
                         <span className="flex-none font-semibold text-brand-dark">
-                          {formatUSD(it.unitPrice * it.qty)}
+                          {formatBF(it.boardFeet * it.qty)} bf
                         </span>
                         <button
                           type="button"
@@ -393,29 +368,29 @@ export default function QuoteCalculator() {
                   )}
                 </div>
 
-                {/* Double-rule subtotal — a subtle mill-ticket cue */}
+                {/* Double-rule total — a subtle mill-ticket cue */}
                 <div className="mx-6 md:mx-8 border-t border-brand-dark/10" />
                 <div className="flex items-center justify-between px-6 md:px-8 py-4 border-t border-brand-dark/15">
                   <span className="text-xs uppercase tracking-[0.25em] text-brand-dark/60">
-                    Estimated Subtotal
+                    Total Board Feet
                   </span>
                   <span className="title-serif text-brand-dark text-2xl tabular-nums">
-                    {formatUSD(estimateTotal)}
+                    {formatBF(totalBF)} bf
                   </span>
                 </div>
 
                 <div className="px-6 md:px-8 pb-6">
-                  {estimateSubmitted ? (
+                  {quoteSubmitted ? (
                     <div className="border border-brand-dark/10 p-6 flex flex-col items-center text-center space-y-2">
                       <Check className="w-6 h-6 text-brand-accent" />
                       <p className="text-brand-dark text-sm font-medium">
-                        Thanks — we've got your estimate. We'll follow up to
-                        confirm pricing and availability.
+                        Thanks — we've got your list. We'll follow up with
+                        current pricing and availability.
                       </p>
                     </div>
                   ) : (
-                    <form onSubmit={submitEstimate} className="space-y-3">
-                      <input type="hidden" name="message" value={estimateSummary()} />
+                    <form onSubmit={submitQuote} className="space-y-3">
+                      <input type="hidden" name="message" value={quoteSummary()} />
                       <input
                         type="text"
                         name="name"
@@ -439,10 +414,10 @@ export default function QuoteCalculator() {
                         className="inline-flex items-center justify-center gap-2.5 w-full bg-brand-accent text-white py-3.5 hover:bg-[#a36814] transition-colors font-medium tracking-widest text-sm uppercase shadow-lg"
                       >
                         <Send className="w-4 h-4" />
-                        Send This Estimate
+                        Request a Quote
                       </button>
                       <p className="text-center text-xs font-light text-brand-dark/45 mt-3">
-                        We'll follow up to confirm pricing, availability, and
+                        We'll follow up with current pricing, availability, and
                         delivery. Prefer email?{" "}
                         <a
                           href={mailtoHref()}
@@ -452,12 +427,6 @@ export default function QuoteCalculator() {
                         </a>
                         .
                       </p>
-                      {PRICING_IS_PRELIMINARY && (
-                        <p className="text-center text-[11px] font-light text-brand-dark/40 mt-2">
-                          Preliminary estimate — not a final quote; freight &
-                          finishing not included.
-                        </p>
-                      )}
                     </form>
                   )}
                 </div>
@@ -467,16 +436,10 @@ export default function QuoteCalculator() {
               <div className="border-t border-brand-dark/10 px-6 md:px-8 py-8 text-center">
                 <ClipboardList className="w-6 h-6 text-brand-dark/25 mx-auto mb-3" />
                 <p className="text-sm font-light text-brand-dark/45">
-                  Your estimate is empty. Choose a size and hit{" "}
+                  Your list is empty. Choose a size and hit{" "}
                   <span className="font-medium text-brand-dark/70">Add</span> to
                   start building a quote.
                 </p>
-                {PRICING_IS_PRELIMINARY && (
-                  <p className="text-[11px] font-light text-brand-dark/40 mt-3">
-                    Prices are preliminary — freight &amp; finishing not
-                    included, final quote confirmed by our team.
-                  </p>
-                )}
               </div>
             )}
           </div>
